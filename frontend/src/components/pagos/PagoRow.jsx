@@ -1,8 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Eye, Edit, Trash2, Download, Printer } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Edit, Trash2, Download, Printer } from 'lucide-react';
 
 const PagoRow = ({ pago, onDelete }) => {
+  const navigate = useNavigate();
+
   // Formatear valores monetarios
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('es-AR', {
@@ -32,8 +34,16 @@ const PagoRow = ({ pago, onDelete }) => {
     }
   };
 
+  // Navegación a la página de detalle
+  const handleRowClick = () => {
+    navigate(`/cobranzas/${pago.id}`);
+  };
+
   return (
-    <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+    <tr 
+      className="hover:bg-gray-50 transition-colors cursor-pointer"
+      onClick={handleRowClick}
+    >
       <td className="py-4 px-6 text-left">
         <div className="font-medium text-gray-900 min-w-[140px]">{pago.numeroComprobante}</div>
       </td>
@@ -44,7 +54,7 @@ const PagoRow = ({ pago, onDelete }) => {
         <div className="min-w-[100px]">{pago.operacion}</div>
       </td>
       <td className="py-4 px-6 text-right">
-        <div className="min-w-[90px]">{formatCurrency(pago.monto)}</div>
+        <div className="min-w-[90px] text-primary-600 font-medium">{formatCurrency(pago.monto)}</div>
       </td>
       <td className="py-4 px-6 text-center">
         <div className="min-w-[90px]">{formatDate(pago.fecha)}</div>
@@ -60,41 +70,37 @@ const PagoRow = ({ pago, onDelete }) => {
         </div>
       </td>
       <td className="py-4 px-6 text-center">
-        <div className="flex items-center justify-center space-x-2 min-w-[150px]">
+        <div 
+          className="flex items-center justify-center space-x-2 min-w-[150px]"
+          onClick={(e) => e.stopPropagation()}
+        >
           <Link 
-            to={`/pagos/ver/${pago.id}`}
-            className="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
-            title="Ver detalles"
+            to={`/cobranzas/editar/${pago.id}`}
+            className="p-1.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            title="Editar cobranza"
           >
-            <Eye size={18} />
-          </Link>
-          <Link 
-            to={`/pagos/editar/${pago.id}`}
-            className="p-1.5 bg-primary-50 text-primary-600 rounded-lg hover:bg-primary-100 transition-colors"
-            title="Editar pago"
-          >
-            <Edit size={18} />
+            <Edit size={16} className="text-gray-600" />
           </Link>
           <button 
-            className="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+            className="p-1.5 bg-gray-100 rounded-lg hover:bg-red-100 transition-colors"
             onClick={() => onDelete && onDelete(pago.id)}
-            title="Eliminar pago"
+            title="Eliminar cobranza"
           >
-            <Trash2 size={18} />
+            <Trash2 size={16} className="text-gray-600 hover:text-red-600" />
           </button>
           <button 
-            className="p-1.5 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors"
+            className="p-1.5 bg-gray-100 rounded-lg hover:bg-green-100 transition-colors"
             onClick={() => window.alert('Descargando comprobante...')}
             title="Descargar comprobante"
           >
-            <Download size={18} />
+            <Download size={16} className="text-gray-600 hover:text-green-600" />
           </button>
           <button 
-            className="p-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors"
+            className="p-1.5 bg-gray-100 rounded-lg hover:bg-purple-100 transition-colors"
             onClick={() => window.alert('Imprimiendo comprobante...')}
             title="Imprimir comprobante"
           >
-            <Printer size={18} />
+            <Printer size={16} className="text-gray-600 hover:text-purple-600" />
           </button>
         </div>
       </td>

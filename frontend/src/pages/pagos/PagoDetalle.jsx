@@ -152,13 +152,13 @@ const PagoDetalle = () => {
           if (pagoEncontrado) {
             setPago(pagoEncontrado);
           } else {
-            setError('No se encontró el pago solicitado');
+            setError('No se encontró la cobranza solicitada');
           }
           
           setLoading(false);
         }, 1000);
       } catch (error) {
-        console.error('Error al cargar los datos del pago:', error);
+        console.error('Error al cargar los datos de la cobranza:', error);
         setError('Error al cargar los datos. Por favor, intente nuevamente.');
         setLoading(false);
       }
@@ -169,13 +169,13 @@ const PagoDetalle = () => {
 
   // Función para eliminar un pago
   const handleDelete = () => {
-    if (window.confirm('¿Está seguro de que desea eliminar este pago? Esta acción no se puede deshacer.')) {
+    if (window.confirm('¿Está seguro de que desea eliminar esta cobranza? Esta acción no se puede deshacer.')) {
       // En un escenario real, aquí harías una llamada a la API para eliminar el pago
       
       // Simular eliminación exitosa
       setTimeout(() => {
-        alert('Pago eliminado correctamente');
-        navigate('/pagos');
+        alert('Cobranza eliminada correctamente');
+        navigate('/cobranzas');
       }, 1000);
     }
   };
@@ -187,18 +187,18 @@ const PagoDetalle = () => {
         <div className="flex items-center">
           <button 
             className="p-2 mr-2 bg-gray-100 rounded-lg hover:bg-gray-200"
-            onClick={() => navigate('/pagos')}
+            onClick={() => navigate('/cobranzas')}
           >
             <ArrowLeft size={20} />
           </button>
           <h1 className="text-3xl font-bold text-gray-800">
-            Detalle de Pago
+            Detalle de Cobranza
           </h1>
         </div>
         
         {pago && (
           <div className="mt-4 sm:mt-0 flex flex-wrap gap-3">
-            <Link to={`/pagos/editar/${pago.id}`}>
+            <Link to={`/cobranzas/editar/${pago.id}`}>
               <Button variant="outline" className="flex items-center">
                 <Edit size={18} className="mr-2" />
                 Editar
@@ -219,16 +219,16 @@ const PagoDetalle = () => {
       {/* Contenido */}
       {loading ? (
         <div className="bg-white rounded-xl shadow-soft p-8 text-center text-gray-500">
-          Cargando datos del pago...
+          Cargando datos de la cobranza...
         </div>
       ) : error ? (
         <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
           <div className="flex flex-col items-center">
             <AlertCircle size={48} className="text-red-500 mb-4" />
             <h2 className="text-xl font-semibold text-red-700 mb-2">{error}</h2>
-            <p className="text-red-600 mb-6">No se pudo encontrar el pago solicitado o hubo un error al cargar los datos.</p>
-            <Link to="/pagos">
-              <Button variant="primary">Volver a Pagos</Button>
+            <p className="text-red-600 mb-6">No se pudo encontrar la cobranza solicitada o hubo un error al cargar los datos.</p>
+            <Link to="/cobranzas">
+              <Button variant="primary">Volver a Cobranzas</Button>
             </Link>
           </div>
         </div>

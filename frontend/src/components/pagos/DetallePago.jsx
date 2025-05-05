@@ -38,7 +38,7 @@ const DetallePago = ({ pago }) => {
     return (
       <Card>
         <div className="text-center py-8">
-          <p className="text-gray-500">No se encontró información del pago</p>
+          <p className="text-gray-500">No se encontró información de la cobranza</p>
         </div>
       </Card>
     );
@@ -50,7 +50,7 @@ const DetallePago = ({ pago }) => {
       <Card>
         <div className="flex flex-col md:flex-row justify-between items-center border-b border-gray-200 pb-6 mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Comprobante de Pago</h2>
+            <h2 className="text-2xl font-bold text-gray-800">Comprobante de Cobranza</h2>
             <p className="text-gray-600">N° {pago.numeroComprobante}</p>
           </div>
           <div className="mt-4 md:mt-0">
@@ -73,7 +73,7 @@ const DetallePago = ({ pago }) => {
             )}
           </div>
           <div>
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Detalles del Pago</h3>
+            <h3 className="text-sm font-medium text-gray-500 mb-2">Detalles de la Cobranza</h3>
             <p className="text-lg font-semibold text-primary-600">{formatCurrency(pago.monto)}</p>
             <p className="text-gray-600">Fecha: {formatDate(pago.fecha)}</p>
             <p className="text-gray-600">Método: {pago.metodoPago}</p>

@@ -40,11 +40,11 @@ const Sidebar = ({ onToggle }) => {
 
   return (
     <aside
-      className={`bg-white h-screen fixed left-0 top-0 shadow-soft transition-all duration-300 z-10
+      className={`bg-blue-900 h-screen fixed left-0 top-0 shadow-xl transition-all duration-300 z-10
                  ${expanded ? 'w-64' : 'w-20'}`}
     >
       {/* Encabezado del sidebar */}
-      <div className="flex flex-col items-center justify-center py-6 border-b border-gray-200">
+      <div className="flex flex-col items-center justify-center py-6 border-b border-blue-800">
         <div className="flex items-center justify-center">
           {/* <img 
             src={logo} 
@@ -52,12 +52,12 @@ const Sidebar = ({ onToggle }) => {
             className={`${expanded ? 'h-12' : 'h-10'} transition-all duration-300`}
           /> */}
           <DollarSign 
-            className="h-10 w-10 text-primary-800" 
+            className="h-10 w-10 text-white" 
             strokeWidth={2} 
           />
           {expanded && (
-            <h1 className="ml-2 text-xl font-bold text-gray-800">
-              <span className="text-primary-600">LOFINETT</span>
+            <h1 className="ml-2 text-xl font-bold text-white">
+              <span className="text-yellow-300">LOFINETT</span>
             </h1>
           )}
         </div>
@@ -66,11 +66,11 @@ const Sidebar = ({ onToggle }) => {
       {/* Botón para expandir/contraer */}
       <button
         onClick={toggleSidebar}
-        className="absolute -right-3 top-20 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 transition-colors"
+        className="absolute -right-3 top-20 bg-blue-900 rounded-full p-1 shadow-md hover:bg-blue-800 transition-colors"
       >
         {expanded ?
-          <ChevronLeft size={20} className="text-primary-600" /> :
-          <ChevronRight size={20} className="text-primary-600" />
+          <ChevronLeft size={20} className="text-white" /> :
+          <ChevronRight size={20} className="text-white" />
         }
       </button>
 
@@ -88,8 +88,8 @@ const Sidebar = ({ onToggle }) => {
                     flex items-center py-3 px-4 rounded-xl transition-all duration-200
                     ${expanded ? '' : 'justify-center'}
                     ${isActive
-                      ? 'bg-primary-50 text-primary-600'
-                      : 'text-gray-600 hover:bg-gray-100'}
+                      ? 'bg-blue-700 text-white'
+                      : 'text-blue-100 hover:bg-blue-800'}
                     ${item.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                   `}
                   onClick={(e) => item.disabled && e.preventDefault()}
@@ -114,12 +114,14 @@ const Sidebar = ({ onToggle }) => {
           className={`
             flex items-center py-3 px-4 rounded-xl transition-all duration-200
             ${expanded ? '' : 'justify-center'}
-            text-gray-600 hover:bg-gray-100
+            text-blue-100 hover:bg-blue-800
           `}
         >
           <Settings size={20} strokeWidth={1.5} />
           {expanded && (
-            <span className="ml-3 font-medium">Configuración</span>
+            <span className="ml-3 font-medium">
+              Configuración
+            </span>
           )}
         </Link>
       </div>

@@ -223,7 +223,7 @@ const PagosList = () => {
 
   // Función para eliminar un pago
   const handleDelete = (id) => {
-    if (window.confirm('¿Está seguro de que desea eliminar este pago?')) {
+    if (window.confirm('¿Está seguro de que desea eliminar esta cobranza?')) {
       // En un escenario real, aquí harías una llamada a la API para eliminar el pago
       setPagos(pagos.filter(pago => pago.id !== id));
     }
