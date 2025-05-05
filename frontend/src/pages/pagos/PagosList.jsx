@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { PlusCircle, FileText, BarChart } from 'lucide-react';
 import PagoRow from '../../components/pagos/PagoRow';
 import FiltrosPago from '../../components/pagos/FiltrosPago';
+import CobranzaModal from '../../components/pagos/CobranzaModal';
 import Button from '../../components/ui/Button';
 
 // Datos de ejemplo para pagos
 const pagosMuestra = [
   {
     id: 1,
-    numeroComprobante: "PAG-0001",
+    numeroComprobante: "COB-0001",
     cliente: "Juan Pérez",
     operacion: "OP-001",
     monto: 10000,
@@ -23,7 +24,7 @@ const pagosMuestra = [
   },
   {
     id: 2,
-    numeroComprobante: "PAG-0002",
+    numeroComprobante: "COB-0002",
     cliente: "María González",
     operacion: "OP-002",
     monto: 15000,
@@ -37,7 +38,7 @@ const pagosMuestra = [
   },
   {
     id: 3,
-    numeroComprobante: "PAG-0003",
+    numeroComprobante: "COB-0003",
     cliente: "Carlos Rodríguez",
     operacion: "OP-003",
     monto: 5000,
@@ -51,7 +52,7 @@ const pagosMuestra = [
   },
   {
     id: 4,
-    numeroComprobante: "PAG-0004",
+    numeroComprobante: "COB-0004",
     cliente: "Juan Pérez",
     operacion: "OP-004",
     monto: 8000,
@@ -65,7 +66,7 @@ const pagosMuestra = [
   },
   {
     id: 5,
-    numeroComprobante: "PAG-0005",
+    numeroComprobante: "COB-0005",
     cliente: "Laura Fernández",
     operacion: "OP-005",
     monto: 12000,
@@ -79,6 +80,53 @@ const pagosMuestra = [
   }
 ];
 
+// Datos de ejemplo para clientes
+const clientesMuestra = [
+  { id: 1, nombre: 'Juan Pérez', documento: '12345678', limite: 100000 },
+  { id: 2, nombre: 'María González', documento: '87654321', limite: 150000 },
+  { id: 3, nombre: 'Carlos Rodríguez', documento: '23456789', limite: 200000 },
+  { id: 4, nombre: 'Laura Fernández', documento: '34567890', limite: 120000 }
+];
+
+// Datos de ejemplo para operaciones
+const operacionesMuestra = [
+  { 
+    id: 1, 
+    clienteId: 1, 
+    monto: 50000, 
+    fechaInicio: '2025-04-01', 
+    cuotas: 12 
+  },
+  { 
+    id: 2, 
+    clienteId: 2, 
+    monto: 80000, 
+    fechaInicio: '2025-03-15', 
+    cuotas: 24 
+  },
+  { 
+    id: 3, 
+    clienteId: 3, 
+    monto: 20000, 
+    fechaInicio: '2025-04-10', 
+    cuotas: 6 
+  },
+  { 
+    id: 4, 
+    clienteId: 1, 
+    monto: 30000, 
+    fechaInicio: '2025-02-20', 
+    cuotas: 12 
+  },
+  { 
+    id: 5, 
+    clienteId: 4, 
+    monto: 60000, 
+    fechaInicio: '2025-04-05', 
+    cuotas: 18 
+  }
+];
+
 const PagosList = () => {
   const [pagos, setPagos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -89,6 +137,9 @@ const PagosList = () => {
     estado: '',
     metodoPago: ''
   });
+  
+  // Estado para el modal de nueva cobranza
+  const [showModal, setShowModal] = useState(false);
 
   // Simular carga de datos y aplicar filtros iniciales
   useEffect(() => {
@@ -177,6 +228,27 @@ const PagosList = () => {
       setPagos(pagos.filter(pago => pago.id !== id));
     }
   };
+  
+  // Función para guardar una nueva cobranza desde el modal
+  const handleSaveCobranza = (nuevaCobranza) => {
+    // En un escenario real, aquí harías una llamada a la API para guardar la cobranza
+    const id = pagos.length > 0 ? Math.max(...pagos.map(p => p.id)) + 1 : 1;
+    const numeroComprobante = `COB-${String(id).padStart(4, '0')}`;
+    
+    const cobranzaCompleta = {
+      ...nuevaCobranza,
+      id,
+      numeroComprobante,
+      operacionMonto: operacionesMuestra.find(o => o.id === parseInt(nuevaCobranza.operacionId))?.monto || 0,
+      saldoRestante: 0 // Esto debería calcularse en un caso real
+    };
+    
+    setPagos([cobranzaCompleta, ...pagos]);
+    setShowModal(false);
+    
+    // Mostrar mensaje de éxito
+    alert(`Cobranza ${numeroComprobante} registrada correctamente.`);
+  };
 
   // Función para calcular el total de los pagos filtrados
   const calcularTotalPagos = () => {
@@ -187,26 +259,28 @@ const PagosList = () => {
     <div className="w-full">
       {/* Encabezado y botones de acción */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Gestión de Pagos</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Gestión de Cobranzas</h1>
         <div className="mt-4 sm:mt-0 flex flex-wrap gap-3">
-          <Link to="/pagos/reportes">
+          <Link to="/cobranzas/reportes">
             <Button variant="outline" className="flex items-center">
               <BarChart size={18} className="mr-2" />
               Reportes
             </Button>
           </Link>
-          <Link to="/pagos/exportar">
+          <Link to="/cobranzas/exportar">
             <Button variant="outline" className="flex items-center">
               <FileText size={18} className="mr-2" />
               Exportar
             </Button>
           </Link>
-          <Link to="/pagos/nuevo">
-            <Button variant="primary" className="flex items-center">
-              <PlusCircle size={18} className="mr-2" />
-              Nuevo Pago
-            </Button>
-          </Link>
+          <Button 
+            variant="primary" 
+            className="flex items-center"
+            onClick={() => setShowModal(true)}
+          >
+            <PlusCircle size={18} className="mr-2" />
+            Nueva Cobranza
+          </Button>
         </div>
       </div>
 
@@ -220,11 +294,11 @@ const PagosList = () => {
       <div className="bg-white rounded-xl shadow-soft w-full">
         {loading ? (
           <div className="py-8 px-6 text-center text-gray-500">
-            Cargando pagos...
+            Cargando cobranzas...
           </div>
         ) : pagos.length === 0 ? (
           <div className="py-8 px-6 text-center text-gray-500">
-            No se encontraron pagos con los filtros aplicados
+            No se encontraron cobranzas con los filtros aplicados
           </div>
         ) : (
           <div className="w-full overflow-x-auto">
@@ -273,7 +347,7 @@ const PagosList = () => {
       {/* Paginación */}
       <div className="flex justify-between items-center mt-6">
         <div className="text-sm text-gray-600">
-          Mostrando {pagos.length} de {pagos.length} pagos
+          Mostrando {pagos.length} de {pagos.length} cobranzas
         </div>
         <div className="flex space-x-1">
           <button className="px-3 py-1 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
@@ -287,6 +361,15 @@ const PagosList = () => {
           </button>
         </div>
       </div>
+      
+      {/* Modal de nueva cobranza */}
+      <CobranzaModal 
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onSave={handleSaveCobranza}
+        clientes={clientesMuestra}
+        operaciones={operacionesMuestra}
+      />
     </div>
   );
 };

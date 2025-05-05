@@ -11,16 +11,16 @@ export default {
       },
       colors: {
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb', // Color principal
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          50: '#e6eef4',
+          100: '#ccdce9',
+          200: '#99b9d3',
+          300: '#6696be',
+          400: '#3373a8',
+          500: '#005092',
+          600: '#004075',
+          700: '#003058',
+          800: '#00203b', // Color principal del logo LOFINETT
+          900: '#001019',
         },
         background: {
           light: '#f9fafb',

@@ -16,7 +16,7 @@ import ClienteForm from './pages/clientes/ClienteForm'
 import OperacionesList from './pages/operaciones/OperacionesList'
 import OperacionForm from './pages/operaciones/OperacionForm'
 
-// Importar páginas de pagos
+// Importar páginas de cobranzas (antes pagos)
 import PagosList from './pages/pagos/PagosList'
 import PagoForm from './pages/pagos/PagoForm'
 import PagoDetalle from './pages/pagos/PagoDetalle'
@@ -33,11 +33,11 @@ function App() {
           <Route path="operaciones" element={<OperacionesList />} />
           <Route path="operaciones/nuevo" element={<OperacionForm />} />
           <Route path="operaciones/editar/:id" element={<OperacionForm />} />
-          {/* Rutas para el módulo de Pagos */}
-          <Route path="pagos" element={<PagosList />} />
-          <Route path="pagos/nuevo" element={<PagoForm />} />
-          <Route path="pagos/editar/:id" element={<PagoForm />} />
-          <Route path="pagos/:id" element={<PagoDetalle />} />
+          {/* Rutas para el módulo de Cobranzas */}
+          <Route path="cobranzas" element={<PagosList />} />
+          <Route path="cobranzas/nuevo" element={<PagoForm />} />
+          <Route path="cobranzas/editar/:id" element={<PagoForm />} />
+          <Route path="cobranzas/:id" element={<PagoDetalle />} />
         </Routes>
       </Layout>
     </Router>
