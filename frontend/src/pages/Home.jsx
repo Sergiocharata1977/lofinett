@@ -8,7 +8,9 @@ import {
   BarChart2, 
   DollarSign, 
   TrendingUp, 
-  AlertCircle 
+  AlertCircle,
+  Wallet,
+  Receipt
 } from 'lucide-react';
 
 const StatCard = ({ title, value, icon: Icon, accentColor = 'primary' }) => {
@@ -18,6 +20,8 @@ const StatCard = ({ title, value, icon: Icon, accentColor = 'primary' }) => {
     blue: 'bg-blue-50 text-blue-600',
     orange: 'bg-orange-50 text-orange-600',
     red: 'bg-red-50 text-red-600',
+    purple: 'bg-purple-50 text-purple-600',
+    teal: 'bg-teal-50 text-teal-600',
   };
   
   return (
@@ -91,6 +95,27 @@ const Home = () => {
             value="3" 
             icon={AlertCircle} 
             accentColor="red"
+          />
+        </div>
+      </div>
+
+      {/* Métricas Financieras Adicionales */}
+      <h2 className="text-xl font-semibold text-gray-800 mb-6">Métricas Financieras</h2>
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="w-full">
+          <StatCard 
+            title="Ventas Totales del Mes" 
+            value="$120,000" 
+            icon={Wallet} 
+            accentColor="purple"
+          />
+        </div>
+        <div className="w-full">
+          <StatCard 
+            title="Cobranzas del Mes" 
+            value="$75,900" 
+            icon={Receipt} 
+            accentColor="teal"
           />
         </div>
       </div>

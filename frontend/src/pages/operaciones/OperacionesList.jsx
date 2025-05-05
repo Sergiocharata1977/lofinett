@@ -1,81 +1,168 @@
 import React, { useState } from 'react';
-import { PlusCircle, Search } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import OperacionRow from '../../components/operaciones/OperacionRow';
 import Button from '../../components/ui/Button';
 import OperacionModal from '../../components/operaciones/OperacionModal';
+import FiltrosOperacion from '../../components/operaciones/FiltrosOperacion';
 
 // Datos de muestra
 const operacionesMuestra = [
   {
     id: 1,
     cliente: "Juan Pérez",
+    clienteId: 1,
     monto: 50000,
     cuotas: 12,
     valorCuota: 6766.67,
     interes: 5.2,
     total: 72800,
-    fechaInicio: "31/3/2023"
+    fechaInicio: "2023-03-31",
+    estado: "Activo",
+    tipoOperacion: "Préstamo"
   },
   {
     id: 2,
     cliente: "Carlos Rodríguez",
+    clienteId: 3,
     monto: 80000,
     cuotas: 24,
     valorCuota: 7173.33,
     interes: 4.8,
     total: 132000,
-    fechaInicio: "14/4/2023"
+    fechaInicio: "2023-04-14",
+    estado: "Activo",
+    tipoOperacion: "Crédito"
   },
   {
     id: 3,
     cliente: "Juan Pérez",
+    clienteId: 1,
     monto: 20000,
     cuotas: 6,
     valorCuota: 4433.33,
     interes: 5.5,
     total: 26600,
-    fechaInicio: "9/3/2023"
+    fechaInicio: "2023-03-09",
+    estado: "Finalizado",
+    tipoOperacion: "Adelanto"
   },
   {
     id: 4,
     cliente: "María López",
+    clienteId: 2,
     monto: 100000,
     cuotas: 36,
     valorCuota: 5361.11,
     interes: 4.2,
     total: 193000,
-    fechaInicio: "22/5/2023"
+    fechaInicio: "2023-05-22",
+    estado: "En mora",
+    tipoOperacion: "Préstamo"
   },
   {
     id: 5,
     cliente: "Laura Fernández",
+    clienteId: 4,
     monto: 30000,
     cuotas: 12,
     valorCuota: 3250,
     interes: 5.0,
     total: 39000,
-    fechaInicio: "5/2/2023"
+    fechaInicio: "2023-02-05",
+    estado: "Activo",
+    tipoOperacion: "Refinanciación"
   }
 ];
 
 const OperacionesList = () => {
   const [operaciones, setOperaciones] = useState(operacionesMuestra);
-  const [busqueda, setBusqueda] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [filtros, setFiltros] = useState({
+    busqueda: '',
+    clienteId: '',
+    montoMin: '',
+    montoMax: '',
+    fechaInicioDesde: '',
+    fechaInicioHasta: '',
+    estado: '',
+    tipoOperacion: ''
+  });
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleBusqueda = (e) => {
-    setBusqueda(e.target.value);
-    
-    // Filtrar operaciones por búsqueda simple (cliente)
-    if (e.target.value === '') {
-      setOperaciones(operacionesMuestra);
-    } else {
-      setOperaciones(
-        operacionesMuestra.filter(op => 
-          op.cliente.toLowerCase().includes(e.target.value.toLowerCase())
-        )
-      );
-    }
+  // Aplicar filtros a las operaciones
+  const handleFilterChange = (nuevosFiltros) => {
+    setFiltros(nuevosFiltros);
+    setLoading(true);
+
+    // En un escenario real, haríamos una llamada a la API con los filtros
+    // Para este ejemplo, filtraremos los datos de muestra localmente
+    setTimeout(() => {
+      let operacionesFiltradas = [...operacionesMuestra];
+      
+      // Filtrar por búsqueda general
+      if (nuevosFiltros.busqueda) {
+        const busqueda = nuevosFiltros.busqueda.toLowerCase();
+        operacionesFiltradas = operacionesFiltradas.filter(op => 
+          op.cliente.toLowerCase().includes(busqueda) ||
+          op.id.toString().includes(busqueda) ||
+          op.monto.toString().includes(busqueda)
+        );
+      }
+      
+      // Filtrar por cliente ID
+      if (nuevosFiltros.clienteId) {
+        operacionesFiltradas = operacionesFiltradas.filter(op => 
+          op.clienteId.toString() === nuevosFiltros.clienteId
+        );
+      }
+      
+      // Filtrar por tipo de operación
+      if (nuevosFiltros.tipoOperacion) {
+        operacionesFiltradas = operacionesFiltradas.filter(op => 
+          op.tipoOperacion === nuevosFiltros.tipoOperacion
+        );
+      }
+      
+      // Filtrar por monto mínimo
+      if (nuevosFiltros.montoMin) {
+        operacionesFiltradas = operacionesFiltradas.filter(op => 
+          op.monto >= parseFloat(nuevosFiltros.montoMin)
+        );
+      }
+      
+      // Filtrar por monto máximo
+      if (nuevosFiltros.montoMax) {
+        operacionesFiltradas = operacionesFiltradas.filter(op => 
+          op.monto <= parseFloat(nuevosFiltros.montoMax)
+        );
+      }
+      
+      // Filtrar por fecha de inicio desde
+      if (nuevosFiltros.fechaInicioDesde) {
+        const fechaDesde = new Date(nuevosFiltros.fechaInicioDesde);
+        operacionesFiltradas = operacionesFiltradas.filter(op => 
+          new Date(op.fechaInicio) >= fechaDesde
+        );
+      }
+      
+      // Filtrar por fecha de inicio hasta
+      if (nuevosFiltros.fechaInicioHasta) {
+        const fechaHasta = new Date(nuevosFiltros.fechaInicioHasta);
+        operacionesFiltradas = operacionesFiltradas.filter(op => 
+          new Date(op.fechaInicio) <= fechaHasta
+        );
+      }
+      
+      // Filtrar por estado
+      if (nuevosFiltros.estado) {
+        operacionesFiltradas = operacionesFiltradas.filter(op => 
+          op.estado === nuevosFiltros.estado
+        );
+      }
+      
+      setOperaciones(operacionesFiltradas);
+      setLoading(false);
+    }, 500);
   };
 
   // Función para manejar la creación de una nueva operación
@@ -115,27 +202,21 @@ const OperacionesList = () => {
         </div>
       </div>
 
-      {/* Barra de búsqueda y filtros */}
-      <div className="flex items-center mb-6">
-        <div className="relative w-full">
-          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-            <Search size={18} className="text-gray-400" />
-          </div>
-          <input
-            type="text"
-            value={busqueda}
-            onChange={handleBusqueda}
-            placeholder="Buscar por cliente..."
-            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
-          />
-        </div>
-      </div>
+      {/* Componente de filtros */}
+      <FiltrosOperacion 
+        onFilterChange={handleFilterChange} 
+        initialFilters={filtros}
+      />
 
       {/* Tabla de operaciones */}
       <div className="bg-white rounded-xl shadow-soft w-full">
-        {operaciones.length === 0 ? (
+        {loading ? (
           <div className="py-8 px-6 text-center text-gray-500">
-            No hay operaciones registradas. ¡Crea una nueva operación!
+            Cargando operaciones...
+          </div>
+        ) : operaciones.length === 0 ? (
+          <div className="py-8 px-6 text-center text-gray-500">
+            No hay operaciones registradas o no se encontraron operaciones con los filtros aplicados.
           </div>
         ) : (
           <div className="w-full overflow-x-auto">
@@ -149,6 +230,7 @@ const OperacionesList = () => {
                   <th className="text-right py-4 px-6 font-semibold text-gray-600">Interés</th>
                   <th className="text-right py-4 px-6 font-semibold text-gray-600">Total</th>
                   <th className="text-center py-4 px-6 font-semibold text-gray-600">Fecha Inicio</th>
+                  <th className="text-center py-4 px-6 font-semibold text-gray-600">Estado</th>
                   <th className="text-center py-4 px-6 font-semibold text-gray-600">Acciones</th>
                 </tr>
               </thead>
