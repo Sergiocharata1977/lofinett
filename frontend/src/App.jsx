@@ -23,6 +23,12 @@ import PagosList from './pages/pagos/PagosList'
 import PagoForm from './pages/pagos/PagoForm'
 import PagoDetalle from './pages/pagos/PagoDetalle'
 
+// Importar páginas de documentos
+import DocumentosList from './pages/documentos/DocumentosList'
+
+// Importar páginas de análisis de riesgo
+import AnalisisList from './pages/analisis/AnalisisList'
+
 function App() {
   return (
     <Router>
@@ -47,6 +53,14 @@ function App() {
           <Route path="cobranzas/nuevo" element={<PagoForm />} />
           <Route path="cobranzas/editar/:id" element={<PagoForm />} />
           <Route path="cobranzas/:id" element={<PagoDetalle />} />
+          
+          {/* Rutas para el módulo de Documentos de Clientes */}
+          <Route path="documentos" element={<DocumentosList />} />
+          <Route path="documentos/cliente/:clienteId" element={<DocumentosList />} />
+          
+          {/* Rutas para el módulo de Análisis de Riesgo */}
+          <Route path="analisis" element={<AnalisisList />} />
+          <Route path="analisis/cliente/:clienteId" element={<AnalisisList />} />
         </Routes>
       </Layout>
     </Router>

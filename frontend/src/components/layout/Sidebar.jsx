@@ -9,7 +9,9 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  Home
+  Home,
+  FileText,
+  LineChart
 } from 'lucide-react';
 // Temporalmente comentamos la importación del logo hasta que se agregue el archivo
 // import logo from '../../assets/img/lofinett-logo.png';
@@ -19,6 +21,8 @@ const menuItems = [
   { path: '/clientes', icon: Users, label: 'Clientes' },
   { path: '/operaciones', icon: CreditCard, label: 'Operaciones' },
   { path: '/cobranzas', icon: Calendar, label: 'Cobranzas' },
+  { path: '/documentos', icon: FileText, label: 'Documentos' },
+  { path: '/analisis', icon: LineChart, label: 'Análisis' },
   { path: '/reportes', icon: BarChart2, label: 'Reportes', disabled: true },
   { path: '/caja', icon: DollarSign, label: 'Caja', disabled: true },
 ];

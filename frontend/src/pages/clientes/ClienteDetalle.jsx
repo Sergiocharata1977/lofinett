@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Edit, Trash2, AlertCircle, Phone, Mail, MapPin, CreditCard, Clock, FileText } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, AlertCircle, Phone, Mail, MapPin, CreditCard, Clock, FileText, LineChart } from 'lucide-react';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 
@@ -243,37 +243,51 @@ const ClienteDetalle = () => {
   return (
     <div className="w-full">
       {/* Encabezado */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
           <button 
-            className="p-2 mr-2 bg-gray-100 rounded-lg hover:bg-gray-200"
             onClick={() => navigate('/clientes')}
+            className="mr-3 p-2 rounded-lg hover:bg-gray-100"
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 className="text-3xl font-bold text-gray-800">
-            {loading ? 'Cargando...' : cliente?.nombre || 'Cliente no encontrado'}
-          </h1>
-        </div>
-        
-        {cliente && (
-          <div className="mt-4 sm:mt-0 flex flex-wrap gap-3">
-            <Link to={`/clientes/editar/${cliente.id}`}>
-              <Button variant="outline" className="flex items-center">
-                <Edit size={18} className="mr-2" />
-                Editar
-              </Button>
-            </Link>
-            <Button 
-              variant="danger" 
-              className="flex items-center"
-              onClick={handleDelete}
-            >
-              <Trash2 size={18} className="mr-2" />
-              Eliminar
-            </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">
+              Cliente: {cliente?.nombre || ''}
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Información detallada y operaciones del cliente
+            </p>
           </div>
-        )}
+        </div>
+        <div className="flex space-x-2">
+          <Link to={`/documentos/cliente/${id}`}>
+            <Button variant="outline" className="flex items-center">
+              <FileText size={18} className="mr-2" />
+              Documentos
+            </Button>
+          </Link>
+          <Link to={`/analisis/cliente/${id}`}>
+            <Button variant="outline" className="flex items-center">
+              <LineChart size={18} className="mr-2" />
+              Análisis de Riesgo
+            </Button>
+          </Link>
+          <Link to={`/clientes/editar/${id}`}>
+            <Button variant="outline" className="flex items-center">
+              <Edit size={18} className="mr-2" />
+              Editar
+            </Button>
+          </Link>
+          <Button 
+            variant="danger" 
+            className="flex items-center"
+            onClick={handleDelete}
+          >
+            <Trash2 size={18} className="mr-2" />
+            Eliminar
+          </Button>
+        </div>
       </div>
 
       {/* Contenido principal */}
