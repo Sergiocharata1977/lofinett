@@ -1,0 +1,49 @@
+/* 
+  Estilos globales para la aplicación de gestión de créditos
+  Este archivo ha sido limpiado y optimizado para permitir que la
+  aplicación utilice todo el ancho disponible de la pantalla.
+*/
+
+/* Eliminado el max-width y centrado que limitaban el ancho total */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* 
+  Estilos básicos para que el sistema se vea bien en modo pantalla completa
+  Se eliminaron los márgenes y padding innecesarios 
+*/
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+/* 
+  Reseteo de tamaños de cajas para mayor consistencia
+  Esto asegura que padding y bordes no se sumen al width total
+*/
+* {
+  box-sizing: border-box;
+}
+
+/* 
+  Reglas para enlaces y botones, asegurando que sean claros y accesibles
+  Estos estilos serán complementarios a los de Tailwind
+*/
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 
+  Ajustes para dispositivos móviles asegurando que todo sea visible
+  y funcione correctamente en diferentes tamaños de pantalla
+*/
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
