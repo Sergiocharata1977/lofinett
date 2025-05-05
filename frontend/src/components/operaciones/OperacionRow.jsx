@@ -1,8 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Edit, Trash2, Eye } from 'lucide-react';
+import { Edit, Trash2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
-const OperacionRow = ({ operacion }) => {
+const OperacionRow = ({ operacion, onDelete }) => {
+  const navigate = useNavigate();
+
   // Formatear valores monetarios
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('es-AR', {
@@ -12,48 +14,50 @@ const OperacionRow = ({ operacion }) => {
     }).format(value);
   };
 
+  // Navegación a la página de detalle
+  const handleRowClick = () => {
+    navigate(`/operaciones/${operacion.id}`);
+  };
+
   return (
-    <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-      <td className="py-4 px-6 text-left">
-        <div className="font-medium text-gray-900 min-w-[120px]">{operacion.cliente}</div>
+    <tr 
+      className="hover:bg-gray-50 transition-colors cursor-pointer" 
+      onClick={handleRowClick}
+    >
+      <td className="py-4 px-6">
+        <div className="font-medium text-gray-800 min-w-[120px]">{operacion.cliente}</div>
       </td>
       <td className="py-4 px-6 text-right">
-        <div className="min-w-[80px]">{formatCurrency(operacion.monto)}</div>
+        <div className="text-primary-600 font-medium min-w-[80px]">{formatCurrency(operacion.monto)}</div>
       </td>
       <td className="py-4 px-6 text-center">
-        <div className="min-w-[40px]">{operacion.cuotas}</div>
+        <div className="min-w-[40px] text-gray-600">{operacion.cuotas}</div>
       </td>
       <td className="py-4 px-6 text-right">
-        <div className="min-w-[80px]">{formatCurrency(operacion.valorCuota)}</div>
+        <div className="min-w-[80px] text-gray-600">{formatCurrency(operacion.valorCuota)}</div>
       </td>
       <td className="py-4 px-6 text-right">
-        <div className="min-w-[40px]">{operacion.interes}%</div>
+        <div className="min-w-[40px] text-gray-600">{operacion.interes}%</div>
       </td>
       <td className="py-4 px-6 text-right">
-        <div className="min-w-[80px]">{formatCurrency(operacion.total)}</div>
+        <div className="min-w-[80px] text-gray-600">{formatCurrency(operacion.total)}</div>
       </td>
       <td className="py-4 px-6 text-center">
-        <div className="min-w-[80px]">{operacion.fechaInicio}</div>
+        <div className="min-w-[80px] text-gray-600">{operacion.fechaInicio}</div>
       </td>
       <td className="py-4 px-6 text-center">
-        <div className="flex items-center justify-center space-x-2 min-w-[120px]">
-          <Link 
-            to={`/operaciones/ver/${operacion.id}`}
-            className="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
-          >
-            <Eye size={18} />
-          </Link>
-          <Link 
+        <div className="flex justify-center space-x-2" onClick={(e) => e.stopPropagation()}>
+          <Link
             to={`/operaciones/editar/${operacion.id}`}
-            className="p-1.5 bg-primary-50 text-primary-600 rounded-lg hover:bg-primary-100 transition-colors"
+            className="p-1.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
           >
-            <Edit size={18} />
+            <Edit size={16} className="text-gray-600" />
           </Link>
-          <button 
-            className="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
-            onClick={() => confirm('¿Está seguro de que desea eliminar esta operación?')}
+          <button
+            onClick={() => onDelete ? onDelete(operacion.id) : confirm('¿Está seguro de que desea eliminar esta operación?')}
+            className="p-1.5 bg-gray-100 rounded-lg hover:bg-red-100 transition-colors"
           >
-            <Trash2 size={18} />
+            <Trash2 size={16} className="text-gray-600 hover:text-red-600" />
           </button>
         </div>
       </td>

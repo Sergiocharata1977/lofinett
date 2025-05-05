@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import { PlusCircle, Search } from 'lucide-react';
 import ClienteRow from '../../components/clientes/ClienteRow';
 import Button from '../../components/ui/Button';
+import ClienteModal from '../../components/clientes/ClienteModal';
 
 const ClientesList = () => {
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busqueda, setBusqueda] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Simular carga de datos desde API
   useEffect(() => {
@@ -134,18 +136,34 @@ const ClientesList = () => {
     }
   };
 
+  // Función para manejar la creación de un nuevo cliente
+  const handleSaveCliente = (nuevoCliente) => {
+    // En un escenario real, aquí se haría una llamada a la API
+    setClientes(prevClientes => [
+      ...prevClientes,
+      {
+        ...nuevoCliente,
+        // Adaptación de datos para la vista de tabla
+        limiteCredito: nuevoCliente.limite,
+        creditoDisponible: nuevoCliente.limite
+      }
+    ]);
+  };
+
   return (
     <div className="w-full">
       {/* Encabezado y botón de nuevo cliente */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Gestión de Clientes</h1>
         <div className="mt-4 sm:mt-0">
-          <Link to="/clientes/nuevo">
-            <Button variant="primary" className="flex items-center">
-              <PlusCircle size={20} className="mr-2" />
-              Nuevo Cliente
-            </Button>
-          </Link>
+          <Button 
+            variant="primary" 
+            className="flex items-center"
+            onClick={() => setModalOpen(true)}
+          >
+            <PlusCircle size={20} className="mr-2" />
+            Nuevo Cliente
+          </Button>
         </div>
       </div>
 
@@ -183,10 +201,9 @@ const ClientesList = () => {
                   <tr className="bg-gray-50 border-b border-gray-200">
                     <th className="text-left py-4 px-6 font-semibold text-gray-600">Nombre</th>
                     <th className="text-left py-4 px-6 font-semibold text-gray-600">Documento</th>
-                    <th className="text-left py-4 px-6 font-semibold text-gray-600">Teléfono</th>
                     <th className="text-left py-4 px-6 font-semibold text-gray-600">Email</th>
+                    <th className="text-left py-4 px-6 font-semibold text-gray-600">Teléfono</th>
                     <th className="text-right py-4 px-6 font-semibold text-gray-600">Límite Crédito</th>
-                    <th className="text-right py-4 px-6 font-semibold text-gray-600">Crédito Disponible</th>
                     <th className="text-center py-4 px-6 font-semibold text-gray-600">Estado</th>
                     <th className="text-center py-4 px-6 font-semibold text-gray-600">Acciones</th>
                   </tr>
@@ -202,23 +219,12 @@ const ClientesList = () => {
         )}
       </div>
 
-      {/* Paginación */}
-      <div className="flex justify-between items-center mt-6">
-        <div className="text-sm text-gray-600">
-          Mostrando {clientes.length} de {clientes.length} clientes
-        </div>
-        <div className="flex space-x-1">
-          <button className="px-3 py-1 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-            Anterior
-          </button>
-          <button className="px-3 py-1 bg-primary-50 border border-primary-300 rounded-lg text-primary-700">
-            1
-          </button>
-          <button className="px-3 py-1 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-            Siguiente
-          </button>
-        </div>
-      </div>
+      {/* Modal para nuevo cliente */}
+      <ClienteModal 
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSave={handleSaveCliente}
+      />
     </div>
   );
 };

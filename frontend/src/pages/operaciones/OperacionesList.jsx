@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { PlusCircle, Search } from 'lucide-react';
 import OperacionRow from '../../components/operaciones/OperacionRow';
 import Button from '../../components/ui/Button';
+import OperacionModal from '../../components/operaciones/OperacionModal';
 
 // Datos de muestra
 const operacionesMuestra = [
@@ -61,6 +61,7 @@ const operacionesMuestra = [
 const OperacionesList = () => {
   const [operaciones, setOperaciones] = useState(operacionesMuestra);
   const [busqueda, setBusqueda] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleBusqueda = (e) => {
     setBusqueda(e.target.value);
@@ -77,18 +78,40 @@ const OperacionesList = () => {
     }
   };
 
+  // Función para manejar la creación de una nueva operación
+  const handleSaveOperacion = (nuevaOperacion) => {
+    // En un escenario real, aquí se haría una llamada a la API
+    setOperaciones(prevOperaciones => [
+      ...prevOperaciones,
+      {
+        ...nuevaOperacion,
+        valorCuota: nuevaOperacion.montoCuota,
+      }
+    ]);
+  };
+
+  // Función para manejar la eliminación de una operación
+  const handleDelete = (id) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar esta operación?')) {
+      // En un escenario real, aquí se haría una llamada a la API
+      setOperaciones(prevOperaciones => prevOperaciones.filter(op => op.id !== id));
+    }
+  };
+
   return (
     <div className="w-full">
       {/* Encabezado y botón de nueva operación */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Operaciones de Financiamiento</h1>
         <div className="mt-4 sm:mt-0">
-          <Link to="/operaciones/nueva">
-            <Button variant="primary" className="flex items-center">
-              <PlusCircle size={20} className="mr-2" />
-              Nueva Operación
-            </Button>
-          </Link>
+          <Button 
+            variant="primary" 
+            className="flex items-center"
+            onClick={() => setModalOpen(true)}
+          >
+            <PlusCircle size={20} className="mr-2" />
+            Nueva Operación
+          </Button>
         </div>
       </div>
 
@@ -131,7 +154,11 @@ const OperacionesList = () => {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {operaciones.map(operacion => (
-                  <OperacionRow key={operacion.id} operacion={operacion} />
+                  <OperacionRow 
+                    key={operacion.id} 
+                    operacion={operacion} 
+                    onDelete={handleDelete}
+                  />
                 ))}
               </tbody>
             </table>
@@ -139,23 +166,12 @@ const OperacionesList = () => {
         )}
       </div>
 
-      {/* Paginación */}
-      <div className="flex justify-between items-center mt-6">
-        <div className="text-sm text-gray-600">
-          Mostrando {operaciones.length} de {operacionesMuestra.length} operaciones
-        </div>
-        <div className="flex space-x-1">
-          <button className="px-3 py-1 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-            Anterior
-          </button>
-          <button className="px-3 py-1 bg-primary-50 border border-primary-300 rounded-lg text-primary-700">
-            1
-          </button>
-          <button className="px-3 py-1 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-            Siguiente
-          </button>
-        </div>
-      </div>
+      {/* Modal para nueva operación */}
+      <OperacionModal 
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSave={handleSaveOperacion}
+      />
     </div>
   );
 };
