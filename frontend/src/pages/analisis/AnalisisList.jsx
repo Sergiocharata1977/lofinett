@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { PlusCircle, ArrowLeft, Search, Filter, X } from 'lucide-react';
+import { PlusCircle, ArrowLeft, Search, Filter, X, PieChart } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
 import AnalisisRow from '../../components/analisis/AnalisisRow';
@@ -439,7 +439,15 @@ const AnalisisList = () => {
             )}
           </div>
         </div>
-        <div className="mt-4 sm:mt-0">
+        <div className="mt-4 sm:mt-0 flex gap-3">
+          <Button 
+            variant="secondary" 
+            className="flex items-center"
+            onClick={() => navigate('/dashboard')}
+          >
+            <PieChart size={18} className="mr-2" />
+            Ver Dashboard
+          </Button>
           <Button 
             variant="primary" 
             className="flex items-center"

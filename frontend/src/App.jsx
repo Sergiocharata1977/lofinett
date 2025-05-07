@@ -28,6 +28,11 @@ import DocumentosList from './pages/documentos/DocumentosList'
 
 // Importar páginas de análisis de riesgo
 import AnalisisList from './pages/analisis/AnalisisList'
+import Dashboard from './pages/analisis/Dashboard'
+
+// Importar páginas de configuración
+import ConfiguracionPage from './pages/configuracion/ConfiguracionPage'
+import CalculadoraPage from './pages/configuracion/CalculadoraPage'
 
 function App() {
   return (
@@ -61,6 +66,11 @@ function App() {
           {/* Rutas para el módulo de Análisis de Riesgo */}
           <Route path="analisis" element={<AnalisisList />} />
           <Route path="analisis/cliente/:clienteId" element={<AnalisisList />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          
+          {/* Rutas para el módulo de Configuración */}
+          <Route path="configuracion" element={<ConfiguracionPage />} />
+          <Route path="configuracion/calculadora" element={<CalculadoraPage />} />
         </Routes>
       </Layout>
     </Router>

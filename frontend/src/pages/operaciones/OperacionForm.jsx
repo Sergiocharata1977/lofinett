@@ -5,6 +5,7 @@ import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
 import CalculadoraCuotas from '../../components/operaciones/CalculadoraCuotas';
 import DetalleCuotas from '../../components/operaciones/DetalleCuotas';
+import { getTasaForCuotas } from '../../services/configuracionService';
 
 const OperacionForm = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const OperacionForm = () => {
     clienteId: '',
     monto: '',
     cuotas: '12',
-    interesMensual: '5',
+    interesMensual: '',
     gastosAdicionales: '0',
     fechaInicio: new Date().toISOString().split('T')[0]
   });
@@ -78,8 +79,26 @@ const OperacionForm = () => {
         }
         setLoading(false);
       }, 1000);
+    } else {
+      // Para nuevas operaciones, establecer la tasa de interés según las cuotas seleccionadas
+      const tasaInteres = getTasaForCuotas(parseInt(formData.cuotas));
+      setFormData(prevState => ({
+        ...prevState,
+        interesMensual: tasaInteres.toString()
+      }));
     }
   }, [id, isEditing]);
+
+  // Actualizar tasa de interés basada en la cantidad de cuotas
+  useEffect(() => {
+    if (formData.cuotas) {
+      const tasaInteres = getTasaForCuotas(parseInt(formData.cuotas));
+      setFormData(prevState => ({
+        ...prevState,
+        interesMensual: tasaInteres.toString()
+      }));
+    }
+  }, [formData.cuotas]);
 
   // Manejar cambios en los campos del formulario
   const handleChange = (e) => {
@@ -304,7 +323,8 @@ const OperacionForm = () => {
                 onChange={handleChange}
                 step="0.1"
                 required
-                disabled={isEditing}
+                disabled={true}
+                helpText="La tasa de interés se aplica automáticamente según la cantidad de cuotas seleccionada."
               />
 
               <FormField
